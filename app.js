@@ -31,12 +31,13 @@ io.on('connection', (socket) => {
 
     //listen on change_username
     socket.on('change_username', (data) => {
-        socket.username = data.username
+        socket.username = data.username;
     });
 
     //listen on new_message
     socket.on('new_message', (data) => {
         //broadcast the new message
+        console.log(socket.username + "  " + data.message);
         io.sockets.emit('new_message', {message: data.message, username: socket.username});
     });
 
@@ -46,7 +47,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        io.sockets.emit('new_message', {message: `${socket.username} disconnected...`, username: 'server'});
+        io.sockets.emit('disconnected', {message: `${socket.username} disconnected...`, username: 'server'});
         clients.delete(socket);
     })
 });

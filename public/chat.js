@@ -44,25 +44,31 @@ $(function(){
 	});
 
 	socket.on('send_mess', (data) => {
-		// sharedSecret = Math.pow(data, secretKey) % publicKey.p;
-		//sharedSecret = BigInt(data) ** BigInt(secretKey) % BigInt(publicKey.p);
 		sharedSecret = 1;
 		for(let i = 0; i < secretKey; i++){
 			sharedSecret *= data;
 			sharedSecret %= publicKey.p;
 		}
+
 		console.log(`shared secret: ${sharedSecret}`);
 	});
 
 	//Emit message
 	send_message.click(function(){
-		socket.emit('new_message', {message : message.val()})
+		let text = message.val();
+		let encryptedText = CryptoJS.AES.encrypt(text, sharedSecret.toString()).toString();
+		socket.emit('new_message', {message : encryptedText});
 	});
 
 	//Listen on new_message
 	socket.on("new_message", (data) => {
 		feedback.html('');
 		message.val('');
+		let decryptedText = CryptoJS.AES.decrypt(data.message, sharedSecret.toString()).toString(CryptoJS.enc.Utf8);
+		chatroom.append("<p class='message'>" + data.username + ": " + decryptedText + "</p>")
+	});
+
+	socket.on("disconnected", (data) => {
 		chatroom.append("<p class='message'>" + data.username + ": " + data.message + "</p>")
 	});
 
