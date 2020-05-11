@@ -41,11 +41,6 @@ io.on('connection', (socket) => {
         io.sockets.emit('new_message', {message: data.message, username: socket.username});
     });
 
-    //listen on typing
-    socket.on('typing', (data) => {
-        socket.broadcast.emit('typing', {username: socket.username});
-    });
-
     socket.on('disconnect', () => {
         io.sockets.emit('disconnected', {message: `${socket.username} disconnected...`, username: 'server'});
         clients.delete(socket);

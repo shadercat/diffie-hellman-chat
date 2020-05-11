@@ -82,10 +82,6 @@ $(function(){
 		socket.emit('typing')
 	});
 
-	//Listen on typing
-	socket.on('typing', (data) => {
-		feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
-	});
 });
 
 
