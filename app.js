@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     res.render('index')
 });
 
-server = app.listen(3000);
+server = app.listen(process.env.port || 3000);
 
 //socket.io instantiation
 const io = require("socket.io")(server);
