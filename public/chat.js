@@ -1,7 +1,7 @@
 
 $(function(){
    	//make connection
-	let socket = io.connect('http://localhost:3000');
+	let socket = io.connect('https://rehome-socket.azurewebsites.net');
 
 	//buttons and inputs
 	let message = $("#message");
